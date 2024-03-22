@@ -12,95 +12,53 @@
         />
         <link rel="stylesheet" href="//use.fontawesome.com/releases/v6.4.2/css/all.css" />
         <link rel="stylesheet" href="css/main.css" />
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </head>
     <body>
-        <nav>
-            <ul class="cf">
-                <li><a class="icon">❯_</a></li>
-                <li>
-                    <a class="dropdown">File</a>
-                    <ul>
-                        <li>
-                            <button id="algorithms-gamemode" class="nav-button">Algorithms</button>
-                        </li>
-                        <li>
-                            <button id="words-gamemode" class="nav-button">Words</button>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a class="dropdown">Edit</a>
-                    <ul>
-                        <li>
-                            <button id="python-language" class="nav-button">Python</button>
-                        </li>
-                        <li><button id="c-language" class="nav-button">C</button></li>
-                        <li><button id="cpp-language" class="nav-button">C++</button></li>
-                        <li><button id="csharp-language" class="nav-button">C#</button></li>
-                        <li>
-                            <button id="javascript-language" class="nav-button">JavaScript</button>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a class="dropdown">View</a>
-                    <ul>
-                        <li>
-                            <button id="command-prompt" class="nav-button">Command Prompt</button>
-                        </li>
-                    </ul>
-                </li>
-                <li><a class="dropdown">Help</a></li>
-            </ul>
-            <div class="command-prompt">
-                <button id="open-command-prompt">Type a command...</button>
-                <div class="command-prompt-open">
-                    <input
-                        id="command-area"
-                        type="text"
-                        placeholder="Type a command..."
-                        autocomplete="off"
-                    />
-                    <button class="command-button">Sample 1</button>
-                    <button class="command-button">Sample 2</button>
-                    <button class="command-button">Sample 3</button>
-                    <button class="command-button">Sample 4</button>
-                    <button class="command-button">Sample 5</button>
-                    <button class="command-button">Sample 6</button>
-                    <button class="command-button">Sample 7</button>
-                    <button class="command-button">Sample 8</button>
-                    <button class="command-button">Sample 9</button>
-                    <button class="command-button">Sample 10</button>
-                </div>
-            </div>
-        </nav>
-        <div id="container">
-            <div id="result">
-                <p>Time: <span id="time">60</span>s</p>
-                <p>WPM: <span id="wpm">0</span></p>
-                <p>Accuracy: <span id="accuracy">100</span>%</p>
-            </div>
-            <div id="typing-test">
-                <div id="text-display" class="text-display"></div>
-                <div id="input-area" class="input-area" contenteditable></div>
-            </div>
-            <div id="restart-container">
-                <button id="restart-button" class="button">
-                    Restart Test <i class="fas fa-undo"></i>
-                </button>
-            </div>
-            <footer>
-                <div class="footer-content">
-                    <a href="https://github.com/JoshuaMarkle/AlgoType" target="_blank">
-                        <i class="fab fa-github"></i> JoshuaMarkle/AlgoType
-                    </a>
-                </div>
-            </footer>
-        </div>
-        <script type="module" src="scripts/timer.js"></script>
-        <script type="module" src="scripts/utils.js"></script>
-        <script type="module" src="scripts/display.js"></script>
-        <script type="module" src="scripts/main.js"></script>
-        <script type="module" src="scripts/command.js"></script>
+		<!-- The actual testing page -->
+		<div id="testing-page">
+			<div id="stats">
+				<p>WPM: <span id="wpm">0</span></p>
+				<p>Accuracy: <span id="accuracy">100</span>%</p>
+				<p>Time: <span id="time">60</span>s</p>
+			</div>
+			<div id="typing">
+				<div id="display"></div>
+				<div id="input" contenteditable></div>
+			</div>
+		</div>
+
+		<button id="restart">
+			Restart Test <i class="fas fa-undo"></i>
+		</button>
+
+		<!-- The completion screen -->
+		<div id="completion-page">
+			<div id="completion-page-container">
+				<div id="stats-column">
+					<div><p>WPM</p><h2 id="wpm-final">0</span></h2></div>
+					<div><p>Acc</p><h2 id="accuracy-final">100%</h2></div>
+					<div><p>Time</p><h2 id="time-final">60s</h2></div>
+				</div>
+				<div id="graph-column">
+					<canvas id="myChart"></canvas>
+				</div>
+			</div>
+		</div>
+
+		<footer>
+			<div>
+				<a><b>Tab</b> - restart</a>
+				<a><b>Esc</b> - settings</a>
+			</div>
+			<div>
+				<a><i class="fas fa-fw fa-palette"></i>pallete</a>
+				<a href="https://github.com/JoshuaMarkle/AlgoType" target="_blank">
+					<i class="fab fa-github"></i>JoshuaMarkle/AlgoType</a>
+			</div>
+		</footer>
+
+		<script type="module" src="scripts/typing-test.js"></script>
+		<script type="module" src="scripts/main.js"></script>
     </body>
 </html>

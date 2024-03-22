@@ -20,3 +20,15 @@ export function applyTheme(themeName) {
         })
         .catch((error) => console.error("Error fetching themes:", error));
 }
+
+export function getColor(name) {
+    const rootStyles = getComputedStyle(document.documentElement);
+    const accentColor = rootStyles.getPropertyValue("--" + name).trim(); // .trim() to remove any potential whitespace
+
+    if (accentColor) {
+        return accentColor;
+    } else {
+        console.error("Error: --" + name + " CSS variable is not defined.");
+        return '#000000';
+    }
+}
