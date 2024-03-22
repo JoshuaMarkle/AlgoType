@@ -38,13 +38,12 @@ function updateDisplayArea() {
     words.forEach((word, wordIndex) => {
         let wordSpan = document.createElement('span');
         let characters = word.split('');
-		let wasEnter = false;
+		let wasEnter;
         characters.forEach((char, charIndex) => {
+			wasEnter = char === '↵';
 			let wasTab = false;
-            if (char === '↵') {
-                char = '';  // Later add a /n after checking for extra characters
-				wasEnter = true;
-            } else if (char === '→') {
+			char = wasEnter ? '' : char;
+            if (char === '→') {
 				wasTab = true;
 				if (words[wordIndex][charIndex-1] === '→') {
 					char = '    ';  // Representing tabs visually (2nd+ tab)
@@ -54,7 +53,7 @@ function updateDisplayArea() {
             }
 
             let charSpan = document.createElement('span');
-            charSpan.textContent = char;
+			charSpan.textContent = char;
 
             // Assign IDs based on the character state
             if (wordIndex < currentWordIndex || wasTab) {
@@ -62,6 +61,13 @@ function updateDisplayArea() {
             } else if (wordIndex === currentWordIndex) {
                 if (charIndex < typedText.length) {
                     charSpan.id = typedText[charIndex] === char ? 'correct' : 'incorrect';
+					if (typedText[charIndex] !== char && wasEnter) { // Display incorrectly use of enter key
+						console.log(char)
+						let enterSpan = document.createElement('span');
+						enterSpan.id = 'incorrect-extra';
+						enterSpan.textContent = typedText[charIndex];
+						wordSpan.appendChild(enterSpan);
+					}
                 } else {
                     charSpan.id = 'neutral';  // Not yet typed
                 }
@@ -204,16 +210,6 @@ function handleTyping(event) {
 				preventDefault = true;
 			}
 		}
-
-		// Disable space key while requiring an enter key (edge case causes problems)
-		const currentWordWithEnters = (words[currentWordIndex]).replace(/\t/g, '→')
-		if (typedText.length === currentWordWithEnters.length 
-			&& currentWordWithEnters[currentWordWithEnters.length - 1] === '↵' 
-			&& key === ' ') {
-			preventDefault = true;
-			typedText = typedText.slice(0, -1); // Delete pressed space
-		}
-
 	} 
 
 	// Disable deletion of tabbed spaces (edge case causes problems)
