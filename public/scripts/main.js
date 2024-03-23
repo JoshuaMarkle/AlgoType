@@ -133,3 +133,24 @@ function updateWpmGraph(wpmOverTime) {
 
 	});
 }
+
+export function toggleDescription() {
+	console.log("hi there");
+	const descriptionContent = document.getElementById('description-column')
+    if (descriptionContent.style.display === 'none' || getComputedStyle(descriptionContent).display === 'none') {
+        descriptionContent.style.display = 'flex'; 
+        descriptionContent.style.width = '0%'; 
+        descriptionContent.style.opacity = '0'; 
+        setTimeout(() => {
+            descriptionContent.style.width = '25%'; 
+            descriptionContent.style.opacity = '1'; 
+        }, 10); 
+
+    } else {
+        descriptionContent.style.width = '0%'; 
+        descriptionContent.style.opacity = '0'; 
+        setTimeout(() => {
+            descriptionContent.style.display = 'none'; 
+        }, 200); 
+    }
+}

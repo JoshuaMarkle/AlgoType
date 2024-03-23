@@ -1,5 +1,5 @@
 import { getRandomFunction } from "./generator.js";
-import { showCompletionPage, hideCompletionPage } from "./main.js"
+import { showCompletionPage, hideCompletionPage, toggleDescription } from "./main.js"
 import { applyTheme } from "./theme.js"
 
 // Contents
@@ -256,6 +256,8 @@ document.addEventListener('DOMContentLoaded', function () {
         document.removeEventListener('keydown', handleTyping);
         startTest();
     });
+
+	document.getElementById("toggle-description").addEventListener('click', function() { toggleDescription(); });
 
 	// Always focus onto the input box
 	document.addEventListener('keydown', function(event) {
