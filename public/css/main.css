@@ -109,7 +109,7 @@ button#restart {
     height: 100%;
     display: none;
     background: var(--background);
-    transition: opacity 0.25s ease;
+    transition: opacity 0.2s ease;
     z-index: 100;
 	align-items: center;
     justify-content: center;
@@ -119,10 +119,43 @@ button#restart {
 	display: flex;
     flex-direction: row;
 	width: 80%;
-	max-width: 800px;
+	max-width: 1200px;
 	margin: 0 auto;
 	height: auto;
     gap: 20px;
+}
+
+#description-column {
+	width: 25%;
+	display: flex;
+    flex-direction: column;
+	justify-content: left;
+	align-items: left;
+	background-color: var(--background-1);
+	border-radius: 10px;
+	padding: 20px;
+	margin-bottom: 10px;
+	overflow: hidden;
+}
+
+#description-column h1 {
+	font-size: 20px;
+    color: var(--foreground);
+	margin: 0;
+}
+
+#description-column p {
+	font-size: 14px;
+	color: var(--neutral);
+	margin: 0;
+	overflow: scroll;
+}
+
+#description-column span {
+	margin: 15px 0px;
+	height: 2px;
+	border-radius: 10px;
+	background-color: var(--neutral);
 }
 
 #stats-column {
@@ -140,13 +173,13 @@ button#restart {
 	margin-bottom: 10px;
     padding: 20px;
 	border-radius: 10px;
-    color: var(--foreground);
 	background-color: var(--background-1);
     white-space: pre-wrap;
 }
 
-#stats-column div h2 {
+#stats-column div h1 {
 	font-size: 40px;
+    color: var(--foreground);
 	margin: 0;
 }
 
@@ -165,10 +198,11 @@ button#restart {
 	background-color: var(--background-1);
 	border-radius: 10px;
 	padding: 20px;
+	margin-bottom: 10px;
 	overflow: hidden;
 }
 
-#myChart {
+#wpm-chart {
 	flex: 1;
 	margin: 0;
 	padding: 0;

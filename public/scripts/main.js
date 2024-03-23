@@ -5,11 +5,17 @@ const wpmDisplay = document.getElementById('wpm-final');
 const accuracyDisplay = document.getElementById('accuracy-final');
 const timeDisplay = document.getElementById('time-final');
 const restartButton = document.getElementById('restart');
+const descriptionTitleDisplay = document.getElementById('description-title');
+const descriptionDisplay = document.getElementById('description');
 
-export function showCompletionPage(wpm, accuracy, time, wpmOverTime) {
+export function showCompletionPage(wpm, accuracy, time, wpmOverTime, currentDescription) {
     wpmDisplay.textContent = wpm;
     accuracyDisplay.textContent = `${accuracy}%`;
     timeDisplay.textContent = `${time}s`;
+
+    const [title, ...descriptionParts] = currentDescription.split(": ");
+	descriptionTitleDisplay.textContent = title;
+	descriptionDisplay.textContent = descriptionParts.join(": ");
 
 	updateWpmGraph(wpmOverTime);
 
@@ -46,7 +52,7 @@ function updateWpmGraph(wpmOverTime) {
 	const colorAccent = getColor("accent");
 	const colorNeutral = getColor("neutral");
 
-	wpmChartInstance = new Chart("myChart", {
+	wpmChartInstance = new Chart("wpm-chart", {
 		type: "line",
 		data: {
 			labels: xValues,

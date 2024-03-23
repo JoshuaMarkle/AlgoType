@@ -16,6 +16,7 @@ let currentNumOfWords = 25;
 let currentTimeAmount = 60;
 let currentTheme = "tokyonight dark";
 let currentText = "Loading...";
+let currentDescription = "Loading..."
 
 // General
 let wpm = 0;
@@ -143,7 +144,9 @@ function updateStats() {
 }
 
 async function startTest() {
-	currentText = await getRandomFunction(currentGamemode, currentLanguage, currentNumOfWords);
+	let result = await getRandomFunction(currentGamemode, currentLanguage, currentNumOfWords);
+	currentText = result.algorithm;
+	currentDescription = result.description;
 	currentText = currentText.replace(/\n/g, '↵\n').replace(/\t/g, '→');
 	words = currentText.split(/[\n ]+/);
 	wordsClean = currentText.replace(/→/g, '').split(/[\n ]+/);
@@ -177,7 +180,7 @@ async function startTest() {
 				document.removeEventListener('keydown', handleTyping);
 
 				// Show the completion screen
-				showCompletionPage(wpm, accuracy, timer, wpmOverTime);
+				showCompletionPage(wpm, accuracy, timer, wpmOverTime, currentDescription);
 			}
 
 			updateStats();
@@ -276,7 +279,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			accuracy = 100
 			timer = 60
 			wpmOverTime = [110, 120, 124, 128, 124, 127, 114, 131]
-			showCompletionPage(wpm, accuracy, timer, wpmOverTime)
+			showCompletionPage(wpm, accuracy, timer, wpmOverTime, currentDescription)
 		}
 
 		// Focus onto the input box
