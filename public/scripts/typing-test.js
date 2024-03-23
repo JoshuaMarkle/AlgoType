@@ -20,6 +20,7 @@ let currentDescription = "Loading..."
 // General
 let wpm = 0;
 let wpmOverTime = [];
+let rawWpmOverTime = [];
 let accuracy = 100
 let timer = 0;
 let interval;
@@ -29,6 +30,7 @@ let currentWordIndex = 0;
 let typedText = '';
 let totalCharacterCount = 0;
 let totalCorrectCharacterCount = 0;
+let totalCharacterCountInSec = 0;
 
 // Apply default theme
 applyTheme(currentTheme);
@@ -125,11 +127,14 @@ function updateDisplayArea() {
 
 function updateStats() {
 	wpm = 0;
+	let rawWpm = 0;
 	if (timer !== 0) {
-		wpm = (totalCorrectCharacterCount / 5) / (timer / 60);
+		wpm = Math.round((totalCorrectCharacterCount / 5) / (timer / 60));
+		rawWpm = Math.round((totalCharacterCountInSec * 60) / 5);
 	}
-	wpm = Math.round(wpm);
 	wpmOverTime.push(wpm);
+	rawWpmOverTime.push(rawWpm);
+	totalCharacterCountInSec = 0;
 
 	accuracy = 100
 	if (totalCharacterCount !== 0) {
@@ -165,7 +170,6 @@ async function startTest(repeat = false) {
 	document.getElementById('input').textContent = ''
 
 	updateDisplayArea();
-	// updateStats();
 
 	document.addEventListener('keydown', handleTyping);
 
@@ -180,8 +184,42 @@ async function startTest(repeat = false) {
 				clearInterval(interval);
 				document.removeEventListener('keydown', handleTyping);
 
+				// Clean the data
+				function downsampleArray(originalArray) {
+					const maxDataPoints = 21;
+					const length = originalArray.length;
+
+					if (length <= maxDataPoints) return originalArray;
+
+					const sampledArray = [];
+					const step = Math.floor(length / (maxDataPoints - 1));
+
+					for (let i = 0; i < length; i += step) {
+						// Ensure we don't add more than maxDataPoints
+						if (sampledArray.length < maxDataPoints - 1) {
+							sampledArray.push(originalArray[i]);
+						} else {
+							// Ensure the last data point is always included
+							sampledArray[maxDataPoints - 1] = originalArray[length - 1];
+							break;
+						}
+					}
+
+					return sampledArray;
+				}
+
+				// Clean the data
+				wpmOverTime = downsampleArray(wpmOverTime);
+				rawWpmOverTime = downsampleArray(rawWpmOverTime);
+
+				// Collect data
+				const wpmData = {
+					wpm: wpmOverTime,
+					raw: rawWpmOverTime
+				}
+
 				// Show the completion screen
-				showCompletionPage(wpm, accuracy, timer, wpmOverTime, currentDescription);
+				showCompletionPage(wpm, accuracy, timer, wpmData, currentDescription);
 			}
 
 			updateStats();
@@ -243,6 +281,7 @@ function handleTyping(event) {
 	// Add to allTypedCharacters for accuracy calculation, including spaces as incorrect
 	if (key !== 'Backspace' && key !== 'Control' && key !== 'Enter' && key != 'Shift' && key != ' ') {
 		totalCharacterCount += 1;
+		totalCharacterCountInSec += 1;
 
 		// If the current character is correct, increment
 		if (currentWord.length >= typedText.length && currentWord[typedText.length - 1] === key) {
@@ -282,18 +321,27 @@ document.addEventListener('DOMContentLoaded', function () {
 		}
 
 		// Add INSTANT COMPLETE for testing 
-		if (event.key === 'Escape') {
-			event.preventDefault();
-			clearInterval(interval)
-			document.removeEventListener('keydown', handleTyping);
-
-			// Create fake data
-			wpm = 120
-			accuracy = 100
-			timer = 60
-			wpmOverTime = [110, 120, 124, 128, 124, 127, 114, 131]
-			showCompletionPage(wpm, accuracy, timer, wpmOverTime, currentDescription)
-		}
+		// if (event.key === 'Escape') {
+		// 	event.preventDefault();
+		// 	clearInterval(interval)
+		// 	document.removeEventListener('keydown', handleTyping);
+		//
+		// 	// Create fake data
+		// 	wpm = 120
+		// 	accuracy = 100
+		// 	timer = 60
+		// 	wpmOverTime = [110, 120, 124, 128, 124, 127, 114, 121]
+		// 	rawWpmOverTime = [110, 125, 130, 135, 120, 140, 90, 150]
+		//
+		// 	// Collect data
+		// 	const wpmData = {
+		// 		wpm: wpmOverTime,
+		// 		raw: rawWpmOverTime
+		// 	}
+		//
+		// 	// Show the completion screen
+		// 	showCompletionPage(wpm, accuracy, timer, wpmData, currentDescription);
+		// }
 
 		// Focus onto the input box
 		if (event.target.tagName !== 'INPUT' && event.target.tagName !== 'TEXTAREA') {
