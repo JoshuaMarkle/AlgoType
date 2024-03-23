@@ -7,7 +7,6 @@ const displayArea = document.getElementById('display');
 const timeDisplay = document.getElementById('time');
 const wpmDisplay = document.getElementById('wpm');
 const accuracyDisplay = document.getElementById('accuracy');
-const restartButton = document.getElementById('restart');
 
 // Default game settings
 let currentGamemode = "algorithms";
@@ -143,13 +142,15 @@ function updateStats() {
 	accuracyDisplay.textContent = accuracy;
 }
 
-async function startTest() {
-	let result = await getRandomFunction(currentGamemode, currentLanguage, currentNumOfWords);
-	currentText = result.algorithm;
-	currentDescription = result.description;
-	currentText = currentText.replace(/\n/g, '↵\n').replace(/\t/g, '→');
-	words = currentText.split(/[\n ]+/);
-	wordsClean = currentText.replace(/→/g, '').split(/[\n ]+/);
+async function startTest(repeat = false) {
+	if (!repeat) {
+		let result = await getRandomFunction(currentGamemode, currentLanguage, currentNumOfWords);
+		currentText = result.algorithm;
+		currentDescription = result.description;
+		currentText = currentText.replace(/\n/g, '↵\n').replace(/\t/g, '→');
+		words = currentText.split(/[\n ]+/);
+		wordsClean = currentText.replace(/→/g, '').split(/[\n ]+/);
+	}
 
 	typedText = '';
 	currentWordIndex = 0;
@@ -251,11 +252,21 @@ function handleTyping(event) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    restartButton.addEventListener('click', function () {
-        clearInterval(interval);
-        document.removeEventListener('keydown', handleTyping);
-        startTest();
-    });
+	document.querySelectorAll('.restart').forEach(function(restartButton) {
+		restartButton.addEventListener('click', function() {
+			clearInterval(interval);
+			document.removeEventListener('keydown', handleTyping);
+			hideCompletionPage();
+			startTest();
+		});
+	});
+
+	document.getElementById("repeat").addEventListener('click', function () {
+			clearInterval(interval);
+			document.removeEventListener('keydown', handleTyping);
+			hideCompletionPage();
+			startTest(repeat = true);
+	});
 
 	document.getElementById("toggle-description").addEventListener('click', function() { toggleDescription(); });
 

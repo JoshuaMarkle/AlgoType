@@ -87,7 +87,7 @@ body {
     color: var(--neutral);
 }
 
-button#restart {
+button.restart {
 	font-family: 'Roboto Mono', monospace;
 	font-weight: bold;
 	font-size: 14px;
@@ -124,6 +124,7 @@ button#restart {
 	margin: 0 auto;
 	height: 410px;
     gap: 20px;
+    transition: max-width 0.2s ease;
 }
 
 #completion-page-buttons {

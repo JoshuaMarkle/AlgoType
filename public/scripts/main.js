@@ -135,13 +135,15 @@ function updateWpmGraph(wpmOverTime) {
 }
 
 export function toggleDescription() {
-	console.log("hi there");
-	const descriptionContent = document.getElementById('description-column')
+	const descriptionContent = document.getElementById('description-column');
+	const completionContainer = document.getElementById('completion-page-container');
     if (descriptionContent.style.display === 'none' || getComputedStyle(descriptionContent).display === 'none') {
         descriptionContent.style.display = 'flex'; 
         descriptionContent.style.width = '0%'; 
         descriptionContent.style.opacity = '0'; 
+		completionContainer.style.maxWidth = '800px';
         setTimeout(() => {
+			completionContainer.style.maxWidth = '1200px';
             descriptionContent.style.width = '25%'; 
             descriptionContent.style.opacity = '1'; 
         }, 10); 
@@ -149,7 +151,9 @@ export function toggleDescription() {
     } else {
         descriptionContent.style.width = '0%'; 
         descriptionContent.style.opacity = '0'; 
+		completionContainer.style.maxWidth = '1200px';
         setTimeout(() => {
+			completionContainer.style.maxWidth = '800px';
             descriptionContent.style.display = 'none'; 
         }, 200); 
     }
